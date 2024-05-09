@@ -20,8 +20,23 @@ CREATE TABLE buildings (
     country VARCHAR(20)
 );
 
+-- Create the Floors table
+CREATE TABLE floors (
+    floor_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    building_id UUID REFERENCES buildings(building_id),
+    floor_name VARCHAR(20)
+);
+
+-- Create the FloorCoordinates table
+CREATE TABLE floor_coordinates (
+    coordinate_id SERIAL PRIMARY KEY,
+    floor_id UUID REFERENCES floors(floor_id),
+    coordinates FLOAT[]  -- Store coordinates as an array of floats
+);
+
 -- Insert dummy data into the buildings table
 INSERT INTO buildings (name, description, owner_history, address_lines, postal_box, town, region, postal_code, country) 
 VALUES 
     ('Dummy Building', 'This is a dummy building', 'Owner A', '123 Main St', 123, 'Dummy Town', 'Dummy Region', 12345, 'Dummy Country'),
     ('Dummy1 Building', 'This is a dummy building1', 'Owner B', '456 Elm St', 456, 'Dummyville', 'Dummyland', 54321, 'Dummylandia');
+

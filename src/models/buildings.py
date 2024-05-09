@@ -3,8 +3,9 @@ ORM for Table 'Buildings'
 """
 
 from sqlalchemy import create_engine, Column, String, Integer
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, relationship
 import uuid
 from src.models import ORM_CONFIG
 
@@ -15,6 +16,8 @@ engine = ORM_CONFIG.engine
 base = ORM_CONFIG.base
 
 # Define Building class to represent the Building table
+
+
 class BuildingsModel(base):
     __tablename__ = 'buildings'
 
@@ -29,32 +32,44 @@ class BuildingsModel(base):
     postal_code = Column(Integer)
     country = Column(String(20))
 
+    # Define the relationship with the FloorsModel table
+    floors = relationship("FloorsModel", back_populates="building")
+
     # Create tables in the database
     base.metadata.create_all(engine, checkfirst=True)
 
+
 class BuildingUtils:
-    def create_building_record(self):
+    def create_building_record(self, request_data):
         Session = sessionmaker(bind=engine)
         session = Session()
-        # Create a new Building object
-        new_building = BuildingsModel(
-            name='Burj Khalifa',
-            description='tallest sky scraper in the world',
-            owner_history='Test User Name',
-            address_lines='Main City, Dubai',
-            postal_box=123,
-            town='Dubai',
-            region='Middle-East',
-            postal_code=12345,
-            country='UAE'
-        )
-        # Add the new_building object to the session
-        session.add(new_building)
-        # Commit the transaction to the database
-        session.commit()
-        # Close the session
-        session.close()
-    
+        try:
+            # Create a new Building object
+            new_building = BuildingsModel(
+                building_id=str(uuid.uuid4()),
+                name=request_data['name'],
+                description=request_data['description'],
+                owner_history=request_data['owner_history'],
+                address_lines=request_data['address_lines'],
+                postal_box=request_data.get('postal_box'),
+                town=request_data['town'],
+                region=request_data['region'],
+                postal_code=request_data.get('postal_code'),
+                country=request_data['country']
+            )
+            # Add the new_building object to the session
+            session.add(new_building)
+            # Commit the transaction to the database
+            session.commit()
+            # Close the session
+            session.close()
+            print({"message": "Building added successfully", "building": new_building})
+            return True, 201
+        except IntegrityError:
+            session.rollback()
+            print({"error": "An error occurred while adding the building"})
+            return False, 500
+
     def get_all_buildings(self):
         Session = sessionmaker(bind=engine)
         session = Session()

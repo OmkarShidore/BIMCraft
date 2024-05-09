@@ -1,10 +1,19 @@
-from src.core import buildings_util
+from src.core import buildings_utils
 
-def create_bulding_record():
-    buildings_util.create_building_record()
+REQUIRED_BUILDING_FIELDS = ['name', 'description', 'owner_history', 'address_lines', 'town', 'region', 'country']
+
+def add_building_record(request_data):
+    missing_parameters = [field for field in REQUIRED_BUILDING_FIELDS if field not in request_data or not request_data[field]]
+    if missing_parameters:
+        return f"Operation Failed, missing key: {missing_parameters}", 400
+    result = buildings_utils.create_building_record(request_data)
+    if result:
+        return "Added building record", 201
+    else:
+        return "Operation Failed", 500
 
 def get_building_records():
-    building_records =  buildings_util.get_all_buildings()
+    building_records =  buildings_utils.get_all_buildings()
     response_data = []
     for building in building_records:
         building_dict = {
