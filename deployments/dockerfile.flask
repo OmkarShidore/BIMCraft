@@ -1,0 +1,34 @@
+# Use Python 3.10 on Debian 11 ("Bullseye") as the base image
+FROM python:3.10-bullseye
+
+# Install PostgreSQL client
+RUN apt-get update 
+
+# Set up a directory for the Flask app
+WORKDIR /app
+
+# Copy the Flask app code into the container
+COPY ./ /app
+
+# Install uWSGI for serving the Flask app
+RUN pip install -r requirements.txt
+RUN pip install uwsgi
+
+ENV ENV=PROD
+ENV POSTGRES_DB_SCHEMA=${POSTGRES_DB_SCHEMA}
+ENV POSTGRES_DB=${POSTGRES_DB}
+ENV POSTGRES_HOST=${POSTGRES_HOST}
+ENV POSTGRES_USER=${POSTGRES_USER}
+ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+ENV TABLE_NAME_BUILDINGS=${TABLE_NAME_BUILDINGS}
+ENV TABLE_NAME_FLOORS=${TABLE_NAME_FLOORS}
+ENV TABLE_NAME_WALLS=${TABLE_NAME_WALLS}
+ENV TABLE_NAME_DOC_DOORS=${TABLE_NAME_DOC_DOORS}
+ENV TABLE_NAME_FURNITURE=${TABLE_NAME_FURNITURE}
+
+# Expose port 5000 for the Flask app
+EXPOSE 5000
+
+# Command to run uWSGI and serve the Flask app
+CMD ["uwsgi", "--http", "0.0.0.0:5000", "--wsgi-file", "app.py", "--callable", "app"]

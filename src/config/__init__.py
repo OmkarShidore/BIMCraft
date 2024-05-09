@@ -2,14 +2,11 @@ import os
 
 class Config:
     def __init__(self) -> None:
-        self.ENV = self._read_env("ENV")
-        self.PORT = self._read_env("PORT")
-        
-        self.DB_NAME = self._read_env("DB_NAME")
-        self.DB_SCHEMA = self._read_env("DB_SCHEMA")
-        self.DB_HOST = self._read_env("DB_HOST")
-        self.DB_USER = self._read_env("DB_USER")
-        self.DB_PASSWORD = self._read_env("DB_PASSWORD")
+        self.POSTGRES_DB_SCHEMA = self._read_env("POSTGRES_DB_SCHEMA")
+        self.POSTGRES_DB = self._read_env("POSTGRES_DB")
+        self.POSTGRES_HOST = self._read_env("POSTGRES_HOST")
+        self.POSTGRES_USER = self._read_env("POSTGRES_USER")
+        self.POSTGRES_PASSWORD = self._read_env("POSTGRES_PASSWORD")
         self.TABLE_NAME_BUILDINGS = self._read_env("TABLE_NAME_BUILDINGS")
         self.TABLE_NAME_FLOORS = self._read_env("TABLE_NAME_FLOORS")
         self.TABLE_NAME_WALLS = self._read_env("TABLE_NAME_WALLS")

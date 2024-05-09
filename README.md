@@ -1,16 +1,31 @@
 # BuildCraft 
 A Py Service for 3D CAD webapp
 
-### Setup development enviornment
-- [WSL-debian](https://learn.microsoft.com/en-us/windows/wsl/install)\
-- [Python-3.11.5](https://www.python.org/downloads/release/python-3115/)
-- [Docker for WSL](https://docs.docker.com/engine/install/debian/)
+### Setup development enviornment Windows
+- [Python-3.10.10](https://www.python.org/downloads/release/python-31010/)
+- [Install Docker](https://docs.docker.com/desktop/install/windows-install/)
+- [Install pSQL 14.11](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+- [Get Postman collection for this backend](https://app.getpostman.com/join-team?invite_code=ab699dca615cd7cdf3c0a7ac2555945a&target_code=0daec711d0eec3598b07db967dd612df)
+- Environment variables file (.env): Reach out to the devlopment team for assistance.
 - Other dependencies
 ```
-sudo apt install postgresql
-python3 -m venv venv
-source venv/bin/activate
+python -m venv venv
+venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-pg_ctlcluster 12 main start
+### Setup devlopment enviornment WSL
+```
+#ToDo
+```
+
+### Use docker compose to run application locally
+#### Run docker demon & make sure the root dir containes .env file, during image build phase, docker will refer these variables to 
+```
+docker-compose up --build
+```
+
+### Run Flask & PSQL Locally
+- Install PSQL
+- Use root user for client in Flask app, export env accordingly [ToDo: Fix for non su User]
+- Use Debug Cofig: "Run App" to run the backend application, it'll auto load .env
