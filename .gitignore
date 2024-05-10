@@ -166,3 +166,4 @@ cython_debug/
 bak.env
 scripts/local.sql
 ignore
+scripts/local.sql
