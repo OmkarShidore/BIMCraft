@@ -57,4 +57,10 @@ def rotate_floor_coordinates(request_data):
         return "Floor or building not found", 404
     else:
         return "Operation Failed", 500
-    
+
+def delete_floor_record(floor_id):
+    result = floors_utils.delete_floor_by_id(floor_id)
+    if result[0]==True:
+        return "Floor deleted", result[1]
+    else:
+        return "Operation Failed", 500

@@ -184,3 +184,30 @@ class WallsUtils:
             return False, 500
         finally:
             session.close()
+
+    def delete_wall_by_id(self, wall_id):
+        try:
+            Session = sessionmaker(bind=engine)
+            session = Session()
+            # Query WallCoordinatesModel to get coordinates related to the wall_id
+            coordinates_query = session.query(WallCoordinatesModel).filter_by(wall_id=wall_id)
+            # Delete coordinates related to the wall_id
+            coordinates_query.delete()
+
+            # Query WallsModel to get wall by wall_id
+            wall_query = session.query(WallsModel).filter_by(wall_id=wall_id)
+            # Delete wall by wall_id
+            wall_query.delete()
+
+            # Commit the transaction
+            session.commit()
+            print("Record deleted successfully.")
+            return True, 200
+        except Exception as e:
+            # Rollback if an error occurs
+            session.rollback()
+            print(f"Error occurred while deleteing wall record: {e}")
+            return False, 500
+        finally:
+            # Close the session
+            session.close()

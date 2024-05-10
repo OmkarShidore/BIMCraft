@@ -56,3 +56,10 @@ def rotate_window_coordinates(request_data):
         return "Window not found", 404
     else:
         return "Operation Failed", 500
+    
+def delete_window_record(window_id):
+    result = windows_utils.delete_window_by_id(window_id)
+    if result[0]==True:
+        return "Window deleted", result[1]
+    else:
+        return "Operation Failed", 500

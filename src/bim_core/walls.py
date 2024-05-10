@@ -56,3 +56,10 @@ def rotate_wall_coordinates(request_data):
         return "Wall or building not found", 404
     else:
         return "Operation Failed", 500
+
+def delete_wall_record(wall_id):
+    result = walls_utils.delete_wall_by_id(wall_id)
+    if result[0]==True:
+        return "Wall deleted", result[1]
+    else:
+        return "Operation Failed", 500

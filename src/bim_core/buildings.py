@@ -30,3 +30,10 @@ def get_building_records():
         }
         response_data.append(building_dict)
     return response_data
+
+def delete_bulding_record(bulding_id):
+    result = buildings_utils.delete_bulding_by_id(bulding_id)
+    if result[0]==True:
+        return "Bulding deleted", result[1]
+    else:
+        return "Operation Failed", 500

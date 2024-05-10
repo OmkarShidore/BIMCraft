@@ -182,3 +182,28 @@ class DoorsUtils:
             return False, 500
         finally:
             session.close()
+
+    def delete_door_by_id(self, door_id):
+        try:
+            Session = sessionmaker(bind=engine)
+            session = Session()
+            # Query DoorsCoordinatesModel to get coordinates related to the door_id
+            coordinates_query = session.query(DoorCoordinatesModel).filter_by(door_id=door_id)
+            # Delete coordinates related to the door_id
+            coordinates_query.delete()
+            
+            # Query DoorModel to get door by door_id
+            door_query = session.query(DoorsModel).filter_by(door_id=door_id)
+            # Delete door by door_id
+            door_query.delete()
+
+            # Commit the transaction
+            session.commit()
+            print("Record deleted successfully.")
+            return True, 200
+        except IntegrityError:
+            session.rollback()
+            print("An error occurred while delete door records")
+            return False, 500
+        finally:
+            session.close()

@@ -182,3 +182,28 @@ class WindowsUtils:
             return False, 500
         finally:
             session.close()
+
+    def delete_window_by_id(self, window_id):
+        try:
+            Session = sessionmaker(bind=engine)
+            session = Session()
+            # Query WindowsCoordinatesModel to get coordinates related to the window_id
+            coordinates_query = session.query(WindowsCoordinatesModel).filter_by(window_id=window_id)
+            # Delete coordinates related to the window_id
+            coordinates_query.delete()
+            
+            # Query WindowsModel to get window by window_id
+            window_query = session.query(WindowsModel).filter_by(window_id=window_id)
+            # Delete window by window_id
+            window_query.delete()
+
+            # Commit the transaction
+            session.commit()
+            print("Record deleted successfully.")
+            return True, 200
+        except IntegrityError:
+            session.rollback()
+            print("An error occurred while delete window records")
+            return False, 500
+        finally:
+            session.close()

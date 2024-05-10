@@ -78,3 +78,23 @@ class BuildingUtils:
         # Close the session
         session.close()
         return buildings
+
+    def delete_bulding_by_id(self, building_id):
+        try:
+            Session = sessionmaker(bind=engine)
+            session = Session()
+            # Query WindowsCoordinatesModel to get coordinates related to the window_id
+            buildings_query = session.query(BuildingsModel).filter_by(building_id=building_id)
+            # Delete coordinates related to the window_id
+            buildings_query.delete()
+
+            # Commit the transaction
+            session.commit()
+            print("Record deleted successfully.")
+            return True, 200
+        except IntegrityError:
+            session.rollback()
+            print("An error occurred while delete window records")
+            return False, 500
+        finally:
+            session.close()

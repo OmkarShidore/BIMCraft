@@ -186,3 +186,28 @@ class FloorsUtils:
             return False, 500
         finally:
             session.close()
+
+    def delete_floor_by_id(self, floor_id):
+        try:
+            Session = sessionmaker(bind=engine)
+            session = Session()
+            # Query FloorsCoordinatesModel to get coordinates related to the floor_id
+            coordinates_query = session.query(FloorCoordinatesModel).filter_by(floor_id=floor_id)
+            # Delete coordinates related to the floor_id
+            coordinates_query.delete()
+            
+            # Query FloorModel to get floor by floor_id
+            floor_query = session.query(FloorsModel).filter_by(floor_id=floor_id)
+            # Delete floor by floor_id
+            floor_query.delete()
+
+            # Commit the transaction
+            session.commit()
+            print("Record deleted successfully.")
+            return True, 200
+        except IntegrityError:
+            session.rollback()
+            print("An error occurred while delete floor records")
+            return False, 500
+        finally:
+            session.close()

@@ -56,3 +56,10 @@ def rotate_door_coordinates(request_data):
         return "Door not found", 404
     else:
         return "Operation Failed", 500
+    
+def delete_door_record(door_id):
+    result = doors_utils.delete_door_by_id(door_id)
+    if result[0]==True:
+        return "Door deleted", result[1]
+    else:
+        return "Operation Failed", 500

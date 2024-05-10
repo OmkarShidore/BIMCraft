@@ -1,12 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from src.config import APP_CONFIG
-from src.bim_core.buildings import get_building_records, add_building_record
-from src.bim_core.floors import get_floor_records, add_floor_record, move_floor_coordinates, rotate_floor_coordinates
-from src.bim_core.walls import get_wall_records, add_wall_record, move_wall_coordinates, rotate_wall_coordinates
-from src.bim_core.doors import get_door_records, add_door_record, move_door_coordinates, rotate_door_coordinates
-from src.bim_core.windows import get_window_records, add_window_record, move_window_coordinates, rotate_window_coordinates
-
+from src.bim_core.buildings import get_building_records, add_building_record, delete_bulding_record
+from src.bim_core.floors import get_floor_records, add_floor_record, move_floor_coordinates, rotate_floor_coordinates, delete_floor_record
+from src.bim_core.walls import get_wall_records, add_wall_record, move_wall_coordinates, rotate_wall_coordinates, delete_wall_record
+from src.bim_core.doors import get_door_records, add_door_record, move_door_coordinates, rotate_door_coordinates, delete_door_record
+from src.bim_core.windows import get_window_records, add_window_record, move_window_coordinates, rotate_window_coordinates, delete_window_record
 
 db_name = APP_CONFIG.POSTGRES_DB
 username = APP_CONFIG.POSTGRES_USER
@@ -16,12 +15,6 @@ host = APP_CONFIG.POSTGRES_HOST
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{username}:{password}@{host}:5432/{db_name}"
 db = SQLAlchemy(app)
-
-class Building(db.Model):
-    __tablename__ = 'buildings'
-    building_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    description = db.Column(db.Text)
 
 @app.route('/health')
 def health():
@@ -38,6 +31,11 @@ def get_buildings():
 def add_building():
     request_data = request.json
     result = add_building_record(request_data)
+    return result
+
+@app.route('/buildings/<building_id>', methods=['DELETE'])
+def delete_building(building_id):
+    result = delete_bulding_record(building_id)
     return result
 
 #-----Floors
@@ -68,6 +66,11 @@ def rotate_floor():
     result = rotate_floor_coordinates(request_data)
     return result
 
+@app.route('/floors/<floor_id>', methods=['DELETE'])
+def delete_floor(floor_id):
+    result = delete_floor_record(floor_id)
+    return result
+
 #----Walls
 
 @app.route('/get_walls', methods=["GET"])
@@ -94,6 +97,11 @@ def move_wall():
 def rotate_wall():
     request_data = request.json
     result = rotate_wall_coordinates(request_data)
+    return result
+
+@app.route('/walls/<wall_id>', methods=['DELETE'])
+def delete_wall(wall_id):
+    result = delete_wall_record(wall_id)
     return result
 
 #----Doors
@@ -124,6 +132,11 @@ def rotate_door():
     result = rotate_door_coordinates(request_data)
     return result
 
+@app.route('/doors/<door_id>', methods=['DELETE'])
+def delete_door(door_id):
+    result = delete_door_record(door_id)
+    return result
+
 #----Windows
 
 @app.route('/get_windows', methods=["GET"])
@@ -150,6 +163,11 @@ def move_window():
 def rotate_window():
     request_data = request.json
     result = rotate_window_coordinates(request_data)
+    return result
+
+@app.route('/windows/<window_id>', methods=['DELETE'])
+def delete_window(window_id):
+    result = delete_window_record(window_id)
     return result
 
 if __name__ == '__main__':
