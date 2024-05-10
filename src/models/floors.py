@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError, DataError
 from src.models import ORM_CONFIG
 import uuid
 from sqlalchemy.dialects.postgresql import UUID, ARRAY, FLOAT
-import numpy as np
+from src.common.utils import get_3d_rotation_matrix, rotate_3d_coordinates
 
 # Define SQLAlchemy engine
 engine = ORM_CONFIG.engine
@@ -23,7 +23,8 @@ class FloorsModel(base):
     # Define the relationship with the Building table
     building = relationship("BuildingsModel", back_populates="floors")
     coordinates = relationship("FloorCoordinatesModel", back_populates="floor")
-
+    walls = relationship("WallsModel", back_populates="floor")
+    
 class FloorCoordinatesModel(base):
     __tablename__ = 'floor_coordinates'
 
@@ -71,7 +72,7 @@ class FloorsUtils:
             return False, 400
         except IntegrityError:
             session.rollback()
-            print({"error": "An error occurred while adding the floor"})
+            print({"error": "An error occurred while adding the wall:", "IntegrityError": ie})
             return False, 500
         
     def get_all_floors(self, building_id):
@@ -108,10 +109,10 @@ class FloorsUtils:
         except Exception as e:
             # Handle any exceptions
             session.rollback()
-            print({"error": "An error occurred while getting floor records"})
+            print({"error": "An error occurred while getting floor records", "Exception": e})
             return False, None
         
-    def move_floor_coordinates_by(self, x, y, z, building_id, floor_id):
+    def move_floor_coordinates_by(self, x, y, z, floor_id):
         try:
             Session = sessionmaker(bind=engine)
             session = Session()
@@ -148,7 +149,7 @@ class FloorsUtils:
         finally:
             session.close()
     
-    def rotate_floor_coordinates_by(self, theta_x, theta_y, theta_z, building_id, floor_id):
+    def rotate_floor_coordinates_by(self, theta_x, theta_y, theta_z, floor_id):
         try:
             Session = sessionmaker(bind=engine)
             session = Session()
@@ -159,44 +160,18 @@ class FloorsUtils:
                 print("No floor coordinates found for the specified floor_id")
                 return False, 404
 
-            # Convert the angles to radians
-            theta_x_rad = np.radians(theta_x)
-            theta_y_rad = np.radians(theta_y)
-            theta_z_rad = np.radians(theta_z)
-
-            # Define rotation matrices for each axis
-            rotation_matrix_x = np.array([
-                [1, 0, 0],
-                [0, np.cos(theta_x_rad), -np.sin(theta_x_rad)],
-                [0, np.sin(theta_x_rad), np.cos(theta_x_rad)]
-            ])
-
-            rotation_matrix_y = np.array([
-                [np.cos(theta_y_rad), 0, np.sin(theta_y_rad)],
-                [0, 1, 0],
-                [-np.sin(theta_y_rad), 0, np.cos(theta_y_rad)]
-            ])
-
-            rotation_matrix_z = np.array([
-                [np.cos(theta_z_rad), -np.sin(theta_z_rad), 0],
-                [np.sin(theta_z_rad), np.cos(theta_z_rad), 0],
-                [0, 0, 1]
-            ])
-
             # Compute the combined rotation matrix
-            rotation_matrix_combined = np.dot(rotation_matrix_z, np.dot(rotation_matrix_y, rotation_matrix_x))
-
+            rotation_matrix_combined = get_3d_rotation_matrix(theta_x, theta_y, theta_z)
+            
             # Iterate over the records, apply rotation, and update coordinates
             for coord in floor_coordinates:
                 # Convert the coordinates to a numpy array
-                coordinates = np.array(coord.coordinates)
-                
+                rotated_coordinates = rotate_3d_coordinates(rotation_matrix_combined, coord.coordinates)
                 # Apply rotation using matrix multiplication
-                rotated_coordinates = np.dot(rotation_matrix_combined, coordinates)
                 
                 # Update the coordinates in the database
                 session.query(FloorCoordinatesModel).filter_by(coordinate_id=coord.coordinate_id).update(
-                    {"coordinates": rotated_coordinates.tolist()},
+                    {"coordinates": rotated_coordinates},
                     synchronize_session=False
                 )
 

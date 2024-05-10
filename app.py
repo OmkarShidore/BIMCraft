@@ -4,6 +4,8 @@ from src.config import APP_CONFIG
 from src.core.buildings import get_building_records, add_building_record
 from src.core.floors import get_floor_records, add_floor_record, move_floor_coordinates, rotate_floor_coordinates
 from src.core.walls import get_wall_records, add_wall_record, move_wall_coordinates, rotate_wall_coordinates
+from src.core.doors import get_door_records, add_door_record, move_door_coordinates, rotate_door_coordinates
+
 db_name = APP_CONFIG.POSTGRES_DB
 username = APP_CONFIG.POSTGRES_USER
 password = APP_CONFIG.POSTGRES_PASSWORD
@@ -94,6 +96,32 @@ def rotate_wall():
     return result
 
 #----Windows
+
+@app.route('/get_doors', methods=["GET"])
+def get_doors():
+    wall_id = request.args.get('wall_id')
+    if not wall_id:
+        return jsonify({"error": "wall_id parameter is missing"}), 400
+    result = get_door_records(wall_id)
+    return result
+
+@app.route('/add_door', methods=["POST"])
+def add_door():
+    request_data = request.json
+    result = add_door_record(request_data)
+    return result
+
+@app.route('/move_door', methods=["POST"])
+def move_door():
+    request_data = request.json
+    result = move_door_coordinates(request_data)
+    return result
+
+@app.route('/rotate_door', methods=["POST"])
+def rotate_door():
+    request_data = request.json
+    result = rotate_door_coordinates(request_data)
+    return result
 
 
 if __name__ == '__main__':

@@ -47,13 +47,30 @@ CREATE TABLE wall_coordinates (
     coordinates FLOAT[]
 );
 
+--Doors
+CREATE TABLE doors (
+    door_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    wall_id UUID REFERENCES walls(wall_id),
+    door_thickness FLOAT
+);
+
+CREATE TABLE door_coordinates (
+    coordinate_id SERIAL PRIMARY KEY,
+    door_id UUID REFERENCES doors(door_id),
+    coordinates FLOAT[] -- Store coordinates as an array of floats
+);
+
 SELECT * FROM floor_coordinates;
 SELECT * FROM floors;
 SELECT * FROM wall_coordinates;
 SELECT * FROM walls;
+SELECT * FROM door_coordinates;
+SELECT * FROM doors;
 
+DELETE FROM wall_coordinates
 DELETE FROM floor_coordinates;
 DELETE FROM wall_coordinates;
+DELETE FROM doors;
 DELETE FROM walls;
 DELETE FROM floors;
 

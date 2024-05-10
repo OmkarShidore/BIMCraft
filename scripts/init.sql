@@ -34,6 +34,22 @@ CREATE TABLE floor_coordinates (
     coordinates FLOAT[]  -- Store coordinates as an array of floats
 );
 
+-- Create Walls table
+CREATE TABLE walls (
+    wall_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    floor_id UUID REFERENCES floors(floor_id),
+    wall_thickness FLOAT
+);
+
+CREATE TABLE wall_coordinates (
+    coordinate_id SERIAL PRIMARY KEY,
+    wall_id UUID REFERENCES walls(wall_id),
+    coordinates FLOAT[]
+);
+
+--Create Doors table
+
+
 -- Insert dummy data into the buildings table
 INSERT INTO buildings (name, description, owner_history, address_lines, postal_box, town, region, postal_code, country) 
 VALUES 
