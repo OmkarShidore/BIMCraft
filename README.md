@@ -38,18 +38,15 @@ docker-compose up --build
 - Primitive BIM with single floor, single wall, single window & single door 
 - Rotation at theta-z
 - Input: left image | Output: right image
-<div style="display: flex;">
-    <img src="https://raw.githubusercontent.com/OmkarShidore/BIMCraft/master/assests/static_assests/rotate1.png" alt="Image 1" style="width: 50%; height: auto; margin-right: 5px;">
-    <img src="https://raw.githubusercontent.com/OmkarShidore/BIMCraft/master/assests/static_assests/rotate2.png" alt="Image 2" style="width: 50%; height: auto; margin-left: 5px;">
-</div>
+
+![Image 1](https://raw.githubusercontent.com/OmkarShidore/BIMCraft/master/assests/static_assests/rotate1.png) | ![Image 2](https://raw.githubusercontent.com/OmkarShidore/BIMCraft/master/assests/static_assests/rotate2.png)
+--- | ---
+
 
 ## Move operation
 - Primitive BIM with single floor, single wall, single window & single door 
 - Move at x + 2
 - Input: left image | Output: right image
-<div style="display: flex;">
-    <img src="https://raw.githubusercontent.com/OmkarShidore/BIMCraft/master/assests/static_assests/move1.png" alt="Image 1" style="width: 50%; height: auto; margin-right: 5px;">
-    <img src="https://raw.githubusercontent.com/OmkarShidore/BIMCraft/master/assests/static_assests/move2.png" alt="Image 2" style="width: 50%; height: auto;">
-</div>
 
-
+![Image 1](https://raw.githubusercontent.com/OmkarShidore/BIMCraft/master/assests/static_assests/move1.png) | ![Image 2](https://raw.githubusercontent.com/OmkarShidore/BIMCraft/master/assests/static_assests/move2.png)
+--- | ---
