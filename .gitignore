@@ -163,3 +163,4 @@ cython_debug/
 #CUSTOM
 .vscode/env.sh
 .env
+bak.env
