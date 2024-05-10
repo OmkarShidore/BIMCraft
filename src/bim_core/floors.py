@@ -1,4 +1,4 @@
-from src.core import floors_utils
+from src.bim_core import floors_utils
 
 REQUIRED_FLOOR_FIELDS = ['building_id', 'floor_name', 'floor_coordinates']
 

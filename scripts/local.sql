@@ -60,19 +60,37 @@ CREATE TABLE door_coordinates (
     coordinates FLOAT[] -- Store coordinates as an array of floats
 );
 
+--Windows
+CREATE TABLE windows (
+    window_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    wall_id UUID REFERENCES walls(wall_id),
+    window_thickness FLOAT
+);
+
+CREATE TABLE window_coordinates (
+    coordinate_id SERIAL PRIMARY KEY,
+    window_id UUID REFERENCES windows(window_id),
+    coordinates FLOAT[] -- Store coordinates as an array of floats
+);
+
 SELECT * FROM floor_coordinates;
 SELECT * FROM floors;
 SELECT * FROM wall_coordinates;
 SELECT * FROM walls;
 SELECT * FROM door_coordinates;
 SELECT * FROM doors;
+SELECT * FROM window_coordinates;
+SELECT * FROM windows;
 
+DELETE FROM window_coordinates;
 DELETE FROM wall_coordinates
 DELETE FROM floor_coordinates;
 DELETE FROM wall_coordinates;
 DELETE FROM doors;
 DELETE FROM walls;
 DELETE FROM floors;
+DELETE FROM windows;
+
 
 -- Insert dummy data into the buildings table
 INSERT INTO buildings (name, description, owner_history, address_lines, postal_box, town, region, postal_code, country) 

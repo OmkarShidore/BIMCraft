@@ -23,6 +23,7 @@ class WallsModel(base):
     # Define the relationship with the Floor table
     floor = relationship("FloorsModel", back_populates="walls")
     doors = relationship("DoorsModel", back_populates="wall")
+    windows = relationship("WindowsModel", back_populates="wall")
     coordinates = relationship("WallCoordinatesModel", back_populates="wall")
 
 class WallCoordinatesModel(base):

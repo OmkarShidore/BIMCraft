@@ -48,7 +48,30 @@ CREATE TABLE wall_coordinates (
 );
 
 --Create Doors table
+CREATE TABLE doors (
+    door_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    wall_id UUID REFERENCES walls(wall_id),
+    door_thickness FLOAT
+);
 
+CREATE TABLE door_coordinates (
+    coordinate_id SERIAL PRIMARY KEY,
+    door_id UUID REFERENCES doors(door_id),
+    coordinates FLOAT[] -- Store coordinates as an array of floats
+);
+
+--Create Windows table
+CREATE TABLE windows (
+    window_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    wall_id UUID REFERENCES walls(wall_id),
+    window_thickness FLOAT
+);
+
+CREATE TABLE window_coordinates (
+    coordinate_id SERIAL PRIMARY KEY,
+    window_id UUID REFERENCES windows(window_id),
+    coordinates FLOAT[] -- Store coordinates as an array of floats
+);
 
 -- Insert dummy data into the buildings table
 INSERT INTO buildings (name, description, owner_history, address_lines, postal_box, town, region, postal_code, country) 

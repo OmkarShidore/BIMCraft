@@ -1,4 +1,4 @@
-from src.core import doors_utils
+from src.bim_core import doors_utils
 
 REQUIRED_WALL_FIELDS = ['wall_id', 'door_coordinates', 'door_thickness']
 
@@ -11,7 +11,7 @@ def add_door_record(request_data):
     if result[0]==True:
         return "Added door record", 201
     elif result[1]==400:
-        return "building id not found", 400
+        return "door id not found", 400
     elif result[1]==500:
         return "Operation Failed", 500
 

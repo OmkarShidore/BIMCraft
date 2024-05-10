@@ -1,4 +1,4 @@
-from src.core import buildings_utils
+from src.bim_core import buildings_utils
 
 REQUIRED_BUILDING_FIELDS = ['name', 'description', 'owner_history', 'address_lines', 'town', 'region', 'country']
 
