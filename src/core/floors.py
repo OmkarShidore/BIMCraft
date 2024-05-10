@@ -28,13 +28,12 @@ def move_floor_coordinates(request_data):
     x = request_data.get('x', 0)
     y = request_data.get('y', 0)
     z = request_data.get('z', 0)
-    building_id = request_data.get('building_id')
     floor_id = request_data.get('floor_id')
 
     # Check for missing parameters or all zero values
-    if x == 0 and y == 0 and z == 0 or not building_id or not floor_id:
+    if x == 0 and y == 0 and z == 0 or not floor_id:
         return f"Missing parameters or x, y & z are 0", 400
-    result = floors_utils.move_floor_coordinates_by(x, y, z, building_id, floor_id)
+    result = floors_utils.move_floor_coordinates_by(x, y, z, floor_id)
     if result[0]==True:
         return "Floor Moved", result[1]
     elif result[0]==False and result[1]==404:
@@ -46,13 +45,12 @@ def rotate_floor_coordinates(request_data):
     theta_x = request_data.get('theta_x', 0)
     theta_y = request_data.get('theta_y', 0)
     theta_z = request_data.get('theta_z', 0)
-    building_id = request_data.get('building_id')
     floor_id = request_data.get('floor_id')
 
     # Check for missing parameters or all zero values
-    if theta_x == 0 and theta_y == 0 and theta_z == 0 or not building_id or not floor_id:
+    if theta_x == 0 and theta_y == 0 and theta_z == 0 or not floor_id:
         return f"Missing parameters or x, y & z are 0", 400
-    result = floors_utils.rotate_floor_coordinates_by(theta_x, theta_y, theta_z, building_id, floor_id)
+    result = floors_utils.rotate_floor_coordinates_by(theta_x, theta_y, theta_z, floor_id)
     if result[0]==True:
         return "Floor Rotated", result[1]
     elif result[0]==False and result[1]==404:
