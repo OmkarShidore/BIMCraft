@@ -30,3 +30,9 @@ docker-compose up --build
 - Use root user for client in Flask app, export env accordingly [ToDo: Fix for non su User]
 - Use Debug Cofig: "Run App" to run the backend application, it'll auto load .env
 - Use postman for client, join the team link given at the top.
+
+
+### Architecture Docs
+
+#### PostgresDB ER
+<img src="https://raw.githubusercontent.com/OmkarShidore/BIMCraft/master/notebooks/stealth.png" alt="GitHub Logo" style="width: 800px;"/>
